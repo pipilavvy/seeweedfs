@@ -1,105 +1,103 @@
-Here are the strategies or best ways to optimize SeaweedFS.
+## Saving image with different sizes
 
-## Increase concurrent writes
+Each image usually store one file key in database. However, one image can have several versions, e.g., thumbnail, small, medium, large, original. And each version of the same image will have a file key. It's not ideal to store all the keys.
 
-By default, SeaweedFS grows the volumes automatically. For example, for no-replication volumes, there will be concurrently 7 writable volumes allocated.
+One way to resolve this is here.
 
-If you want to distribute writes to more volumes, you can do so by instructing SeaweedFS master via this URL.
-
-```bash	
-curl http://localhost:9333/vol/grow?count=12&replication=001
-```
-
-This will assign 12 volumes with 001 replication. Since 001 replication means 2 copies for the same data, this will actually consumes 24 physical volumes.
-
-## Increase concurrent reads
-
-Same as above, more volumes will increase read concurrency.
-
-In addition, increase the replication will also help. Having the same data stored on multiple servers will surely increase read concurrency.
-
-## Add more hard drives
-
-More hard drives will give you better write/read throughput.
-
-## Gzip content
-
-SeaweedFS determines the file can be gzipped based on the file name extension. So if you submit a textual file, it's better to use an common file name extension, like ".txt", ".html", ".js", ".css", etc. If the name is unknown, like ".go", SeaweedFS will not gzip the content, but just save the content as is.
-
-You can also manually gzip content before submission. If you do so, make sure the submitted file has file name with ends with ".gz". For example, "my.css" can be gzipped to "my.css.gz" and sent to SeaweedFS. When retrieving the content, if the http client supports "gzip" encoding, the gzipped content would be sent back. Otherwise, the unzipped content would be sent back.
-
-## Memory consumption
-
-For volume servers, the memory consumption is tightly related to the number of files. For example, one 32G volume can easily have 1.5 million files if each file is only 20KB. To store the 1.5 million entries of meta data in memory, currently SeaweedFS consumes 36MB memory, about 24bytes per entry in memory. So if you allocate 64 volumes(2TB), you would need 2~3GB memory. However, if the average file size is larger, say 200KB, only 200~300MB memory is needed.
-
-Theoretically the memory consumption can go even lower by compacting since the file ids are mostly monotonically increasing. I did not invest time on that yet since the memory consumption, 24bytes/entry(including uncompressed 8bytes file id, 4 bytes file size, plus additional map data structure cost) is already pretty low. But I welcome any one to compact these data in memory even more efficiently.
-
-## Insert with your own keys
-
-The file id generation is actually pretty trivial and you could use your own way to generate the file keys.
-
-A file key has 3 parts:
-
-- volume id: a volume with free spaces
-- file id: a monotonously increasing and unique number
-- file cookie: a random number, you can customize it in whichever way you want
-
-You can directly ask master server to assign a file key, and replace the file id part to your own unique id, e.g., user id.
-
-Also you can get each volume's free space from the server status.
+Reserve a set of file keys, for example, 5
 
 ```bash
-curl "http://localhost:9333/dir/status?pretty=y"
+curl http://<host>:<port>/dir/assign?count=5
+{"fid":"3,01637037d6","url":"127.0.0.1:8080","publicUrl":"localhost:8080","count":5}
 ```
 
-Once you are sure about the volume free spaces, you can use your own file ids. Just need to ensure the file key format is compatible.
-
-The assigned file cookie can also be customized.
-
-Customizing the file id and/or file cookie is an acceptable behavior. "strict monotonously increasing" is not necessary, but keeping file id in a "mostly" increasing order is expected in order to keep the in memory data structure efficient.
-
-## Upload large files
-
-If files are large and network is slow, the server will take time to read the file. Please increase the "-readTimeout=3" limit setting for volume server. It cut off the connection if uploading takes a longer time than the limit.
-
-### Upload large files with Auto Split/Merge
-
-If the file is large, it's better to upload this way:
+Save the 5 versions of the image to the volume server. The urls for each image can be:
 
 ```bash
-weed upload -maxMB=64 the_file_name
+http://<url>:<port>/3,01637037d6
+http://<url>:<port>/3,01637037d6_1
+http://<url>:<port>/3,01637037d6_2
+http://<url>:<port>/3,01637037d6_3
+http://<url>:<port>/3,01637037d6_4
 ```
 
-This will split the file into data chunks of 64MB each, and upload them separately. The file ids of all the data chunks are saved into an additional meta chunk. The meta chunk's file id are returned.
+## Overwriting mime types
 
-When downloading the file, just
+The correct way to send mime type:
 
 ```bash
-weed download the_meta_chunk_file_id
+curl -F "file=@myImage.png;type=image/png" http://127.0.0.1:8081/5,2730a7f18b44
 ```
 
-The meta chunk has the list of file ids, with each file id on each line. So if you want to process them in parallel, you can download the meta chunk and deal with each data chunk directly.
-
-### Collection as a Simple Name Space
-
-When assigning file ids,
+The wrong way to send it:
 
 ```bash
-curl http://master:9333/dir/assign?collection=pictures
-curl http://master:9333/dir/assign?collection=documents
+curl -H "Content-Type:image/png" -F file=@myImage.png http://127.0.0.1:8080/5,2730a7f18b44
 ```
 
-will also generate a "pictures" collection and a "documents" collection if they are not created already. Each collection will have its dedicated volumes, and they will not share the same volume.
+## Securing SeaweedFS
 
-Actually, the actual data files have the collection name as the prefix, e.g., "pictures_1.dat", "documents_3.dat".
+The simple way is to front all master and volume servers with firewall.
 
-In case you need to delete them later, you can go to the volume servers and delete the data files directly, for now. Later maybe a deleteCollection command may be implemented, if someone asks...
-
-## Logging
-
-When going to production, you will want to collect the logs. SeaweedFS uses glog. Here are some examples:
+However, if blocking servicing port is not feasible or trivial, a white list option can be used. Only traffic from the white list IP addresses have write permission.
 
 ```bash
-weed -v=2 master
-weed -log_dir=. volume
+weed master -whiteList="::1,127.0.0.1"
+weed volume -whiteList="::1,127.0.0.1"
+# "::1" is for IP v6 localhost.
 ```
+
+## Data Migration Example
+
+```bash
+weed master -mdir="/tmp/mdata" -defaultReplication="001" -ip="localhost" -port=9334
+weed volume -dir=/tmp/vol1/ -mserver="localhost:9334" -ip="localhost" -port=8081
+weed volume -dir=/tmp/vol2/ -mserver="localhost:9334" -ip="localhost" -port=8082
+weed volume -dir=/tmp/vol3/ -mserver="localhost:9334" -ip="localhost" -port=8083
+```
+
+```bash
+ls vol1 vol2 vol3
+vol1:
+1.dat 1.idx 2.dat 2.idx 3.dat 3.idx 5.dat 5.idx
+vol2:
+2.dat 2.idx 3.dat 3.idx 4.dat 4.idx 6.dat 6.idx
+vol3:
+1.dat 1.idx 4.dat 4.idx 5.dat 5.idx 6.dat 6.idx
+```
+
+stop all of them
+
+move vol3/* to vol1 and vol2
+
+it is ok to move x.dat and x.idx from one volumeserver to another volumeserver, 
+because they are exactly the same. 
+it can be checked by md5.
+
+```bash
+md5 vol1/1.dat vol2/1.dat
+MD5 (vol1/1.dat) = c1a49a0ee550b44fef9f8ae9e55215c7
+MD5 (vol2/1.dat) = c1a49a0ee550b44fef9f8ae9e55215c7
+md5 vol1/1.idx vol2/1.idx
+MD5 (vol1/1.idx) = b9edc95795dfb3b0f9063c9cc9ba8095
+MD5 (vol2/1.idx) = b9edc95795dfb3b0f9063c9cc9ba8095
+```
+
+```bash
+ls vol1 vol2 vol3
+vol1:
+1.dat 1.idx 2.dat 2.idx 3.dat 3.idx 4.dat 4.idx 5.dat 5.idx 6.dat 6.idx
+vol2:
+1.dat 1.idx 2.dat 2.idx 3.dat 3.idx 4.dat 4.idx 5.dat 5.idx 6.dat 6.idx
+vol3:
+```
+
+start
+
+```bash
+weed master -mdir="/tmp/mdata" -defaultReplication="001" -ip="localhost" -port=9334
+weed volume -dir=/tmp/vol1/ -mserver="localhost:9334" -ip="localhost" -port=8081
+weed volume -dir=/tmp/vol2/ -mserver="localhost:9334" -ip="localhost" -port=8082
+```
+
+so we finished moving data of localhost:8083 to localhost:8081/localhost:8082 
