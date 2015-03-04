@@ -1,31 +1,37 @@
 ## Introduction
 
-When talking about file systems, many people would assume directories, list files under a directory, etc. These are expected if we want to hook up Seaweed File System with linux by FUSE, or with Hadoop, etc.
+When talking about file systems, many people would assume directories, list files under a directory, etc. These are expected if we want to hook up SeaweedFS with linux by FUSE, or with Hadoop, etc.
 
 ### Sample usage
+
 Two ways to start a weed filer
 
-```
-// assuming you already started weed master and weed volume
-> weed filer
-// Or assuming you have nothing started yet, this command starts master server, volume server, and filer in one shot. 
-// It's strictly the same as starting them separately.
-> weed server -filer=true
+```bash
+# assuming you already started weed master and weed volume
+weed filer
+
+# Or assuming you have nothing started yet,
+# this command starts master server, volume server, and filer in one shot. 
+# It's strictly the same as starting them separately.
+weed server -filer=true
 ```
 
 Now you can add/delete files, and even browse the sub directories and files
 
-```
-//POST a file and read it back
-> curl -F "filename=@README.md" "http://localhost:8888/path/to/sources/"
-> curl "http://localhost:8888/path/to/sources/README.md"
-//POST a file with a new name and read it back
-> curl -F "filename=@Makefile" "http://localhost:8888/path/to/sources/new_name"
-> curl "http://localhost:8888/path/to/sources/new_name"
-//list sub folders and files
-> curl "http://localhost:8888/path/to/sources/?pretty=y"
-// if lots of files under this folder, here is a way to efficiently paginate through all of them
-> curl "http://localhost:8888/path/to/sources/?lastFileName=abc.txt&limit=50&pretty=y"
+```bash
+# POST a file and read it back
+curl -F "filename=@README.md" "http://localhost:8888/path/to/sources/"
+curl "http://localhost:8888/path/to/sources/README.md"
+
+# POST a file with a new name and read it back
+curl -F "filename=@Makefile" "http://localhost:8888/path/to/sources/new_name"
+curl "http://localhost:8888/path/to/sources/new_name"
+
+# list sub folders and files
+curl "http://localhost:8888/path/to/sources/?pretty=y"
+
+# if lots of files under this folder, here is a way to efficiently paginate through all of them
+curl "http://localhost:8888/path/to/sources/?lastFileName=abc.txt&limit=50&pretty=y"
 ```
 
 ### Design
