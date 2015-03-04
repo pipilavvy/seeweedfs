@@ -40,13 +40,13 @@ A common file system would use inode to store meta data for each folder and file
 
 SeaweedFS wants to make as small number of disk access as possible, yet still be able to store a lot of file metadata. So we need to think very differently.
 
-From a full file path to get to the file content, there are several steps:
+We can take the following steps to map a full file path to the actual data block:
 
 1. file_parent_directory => directory_id
 2. directory_id+fileName => file_id
 3. file_id => data_block
 
-Because default SeaweedFS only provides file_id=>data_block mapping, the first 2 steps need to be implemented.
+Because default SeaweedFS only provides file_id=>data_block mapping, only the first 2 steps need to be implemented.
 
 There are several data features I noticed:
 
@@ -67,7 +67,7 @@ I believe these are reasonable assumptions:
 
 #### Data Structure
 
-This difference lead to the design that the metadata for directories and files should have different data structure.
+This assumed differences between directories and files lead to the design that the metadata for directories and files should have different data structure.
 
 1. Store directories in memory
     1. all of directories hopefully all be in memory
@@ -77,6 +77,7 @@ This difference lead to the design that the metadata for directories and files s
     2. efficient to locate files, binary search
 
 #### Complexity
+
 For one file retrieval, if the parent directory includes n folders, then it will take n steps to navigate from root to the file folder. However, this O(n) step is all in memory. So in practice, it will be very fast.
 
 For one file retrieval, the dir_id+filename=>file_id lookup will be O(logN) using LevelDB, a log-structured-merge (LSM) tree implementation. The complexity is the same as B-Tree.
@@ -89,15 +90,17 @@ For file renaming, it's just trivially delete and then add a row in leveldb.
 
 ### Details
 
-In the current first version, the path_to_file=>file_id mapping is stored with an efficient embedded leveldb. Being embedded, it runs on single machine. So it's not linearly scalable yet. However, it can handle LOTS AND LOTS of files on SeaweedFS on other servers. Using an external distributed database is possible. Your contribution is welcome!
+In the current first version, the path_to_file=>file_id mapping is stored with an efficient embedded leveldb. Being embedded, it runs on single machine. So it's not linearly scalable yet. However, it can handle LOTS AND LOTS of files on SeaweedFS on other master/volume servers.
 
-The in-memory directory structure can improve on memory efficiency. Current simple map in memory works when the number of directories is less than 1 million, which will use about 500MB memory. But I would highly doubt any common use case would have more than 100 directories.
+Switching from the embedded leveldb to an external distributed database is very feasible. Your contribution is welcome!
+
+The in-memory directory structure can improve on memory efficiency. Current simple map in memory works when the number of directories is less than 1 million, which will use about 500MB memory. But I would expect common use case would have a few, not even more than 100 directories.
 
 ### Use Cases
 
 Clients can assess one "weed filer" via HTTP, list files under a directory, create files via HTTP POST, read files via HTTP POST directly.
 
-Although one "weed filer" can only sits in one machine, you can start multiple "weed filer" on several machines, each "weed filer" instance running in its own collection, having its own namespace, but sharing the same Seaweed-FS.
+Although one "weed filer" can only sits in one machine, you can start multiple "weed filer" on several machines, each "weed filer" instance running in its own collection, having its own namespace, but sharing the same SeaweedFS storage.
 
 ### Future
 
