@@ -1,0 +1,1 @@
+This page aims to consolidate the pages on the [[single-node filer|Directories and Files]] and [[distrubuted filer]] into one.
