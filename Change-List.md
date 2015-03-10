@@ -2,6 +2,14 @@
 
 This file contains list of recent changes, important features, usage changes, data format changes, etc. Do read this if you upgrade.
 
+## v0.69
+
+1. Add "weed volume -port.public=xxx" option for read only access.
+2. Change from "publicIp" to free-text "publicUrl".
+3. Change master if master leader changes.
+4. Correctly handle .tar.gz file uploads, avoiding auto unzip.
+5. Avoid wrong way to handle write failure for replicated writes, which could lead to volume .dat file format error.
+
 ## v0.68
 
 1. Filer supports storing file~file_id mapping to remote key-value storage Redis, Cassandra. So multiple filers are supported.
