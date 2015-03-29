@@ -32,7 +32,22 @@ You can also manually gzip content before submission. If you do so, make sure th
 
 For volume servers, the memory consumption is tightly related to the number of files. For example, one 32G volume can easily have 1.5 million files if each file is only 20KB. To store the 1.5 million entries of meta data in memory, currently SeaweedFS consumes 36MB memory, about 24bytes per entry in memory. So if you allocate 64 volumes(2TB), you would need 2~3GB memory. However, if the average file size is larger, say 200KB, only 200~300MB memory is needed.
 
-Theoretically the memory consumption can go even lower by compacting since the file ids are mostly monotonically increasing. I did not invest time on that yet since the memory consumption, 24bytes/entry(including uncompressed 8bytes file id, 4 bytes file size, plus additional map data structure cost) is already pretty low. But I welcome any one to compact these data in memory even more efficiently.
+SeaweedFS alsl has leveldb and boltdb support, which reduces memory consumption even more.
+
+To use it, "weed server -volume.index=[memory|leveldb|boltdb]", or "weed volume -index=[memory|leveldb|boltdb]". You can switch between the 3 modes any time, as often as possible. If the files for leveldb or boltdb is outdated or missing, they will be re-generated as needed.
+
+boltdb is fairly slow to write, about 6 minutes for recreating index for 1553934 files. Boltdb loads 1,553,934 x 16 = 24,862,944bytes from disk, and generate the boltdb as large as 134,217,728 bytes in 6 minutes.
+To compare, leveldb recreates index as large as 27,188,148 bytes in 8 seconds.
+
+To test the memory consumption, the leveldb or boltdb index are created. There are 7 volumes in benchmark collection, each with about 1553K files. The server is restarted, then I start the benchmark tool to read lots of files.
+For leveldb, server memory starts at 142,884KB, and stays at 179,340KB.
+For boltdb, server memory starts at 73,756KB, and stays at 144,564KB.
+For in-memory, server memory starts at 368,152KB, and stays at 448,032KB.
+
+To test the write speed, I use the benchmark tool with default parameters.
+For boltdb, the write is about 4.1MB/s, 4.1K files/s
+For leveldb, the writes is about 10.4MB/s, 10.4K files/s
+For in-memory, it is a tiny bit faster, not statistically different. But I am using SSD, and os buffer cache also affect the numbers. So your results may be different.
 
 ## Insert with your own keys
 
