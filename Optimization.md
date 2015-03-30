@@ -49,6 +49,8 @@ For boltdb, the write is about 4.1MB/s, 4.1K files/s
 For leveldb, the writes is about 10.4MB/s, 10.4K files/s
 For in-memory, it is a tiny bit faster, not statistically different. But I am using SSD, and os buffer cache also affect the numbers. So your results may be different.
 
+Note: BoltDB has a limit that the max db size is 256MB on 32bit systems.
+
 ## Insert with your own keys
 
 The file id generation is actually pretty trivial and you could use your own way to generate the file keys.
