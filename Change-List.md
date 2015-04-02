@@ -10,6 +10,7 @@ This file contains list of recent changes, important features, usage changes, da
 4. Correctly handle .tar.gz file uploads, avoiding auto unzip.
 5. Avoid wrong way to handle write failure for replicated writes, which could lead to volume .dat file format error.
 6. Support in-memory/leveldb/boltdb mode tuning for memory/performance balance.
+7. Started basic admin ui.
 
 ## v0.68
 
