@@ -3,6 +3,7 @@
 You can append to any HTTP API with &pretty=y to see a formatted json output.
 
 ### Assign a file key
+This operation is very cheap. Just increase a number in master server's memory.
 
 ```bash
 # Basic Usage:
@@ -32,7 +33,7 @@ curl "http://localhost:9333/dir/lookup?volumeId=3&pretty=y"
   ]
 }
 # Other usages:
-# You can actually use the file id to lookup
+# You can actually use the file id to lookup, if you are lazy to parse the file id.
 curl "http://localhost:9333/dir/lookup?volumeId=3,01637037d6"
 # If you know the collection, specify it since it will be a little faster
 curl "http://localhost:9333/dir/lookup?volumeId=3&collection=turbo"
@@ -48,6 +49,8 @@ curl "http://localhost:9333/vol/vacuum?garbageThreshold=0.4"
 ```
 
 The garbageThreshold=0.4 is optional, and will not change the default threshold. You can start volume master with a different default garbageThreshold.
+
+This operation is not trivial. It will try to make a copy of the .dat and .idx files, skipping deleted files, and switch to the new files, removing the old files.
 
 ### Pre-Allocate Volumes
 
