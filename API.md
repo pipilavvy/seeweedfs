@@ -340,3 +340,33 @@ curl  "http://localhost:8888/javascript/?pretty=y&lastFileName=new_name.js&limit
 }
 
 ```
+
+### Move a directory
+This is for embedded filer only.
+
+Rename a folder is an O(1) operation, even for folders with lots of files.
+
+```bash
+> curl  "http://localhost:8888/admin/mv?from=/javascript&to=/assets"
+> curl  "http://localhost:8888/javascript/?pretty=y"     # no files under /javascript now
+{
+  "Directory": "/javascript/",
+  "Files": null,
+  "Subdirectories": null
+}
+> curl  "http://localhost:8888/assets/?pretty=y"         # files are moved to /assets folder
+{
+  "Directory": "/assets/",
+  "Files": [
+    {
+      "name": "new_name.js",
+      "fid": "3,034389657e"
+    },
+    {
+      "name": "report.js",
+      "fid": "7,0254f1f3fd"
+    }
+  ],
+  "Subdirectories": null
+}
+```
