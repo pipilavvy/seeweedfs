@@ -375,3 +375,8 @@ Rename a folder is an O(1) operation, even for folders with lots of files.
   "Subdirectories": null
 }
 ```
+
+# Delete a file
+```bash
+> curl -X DELETE "http://localhost:8888/assets/report.js"
+```
