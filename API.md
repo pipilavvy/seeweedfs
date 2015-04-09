@@ -347,14 +347,19 @@ This is for embedded filer only.
 Rename a folder is an O(1) operation, even for folders with lots of files.
 
 ```bash
+# Change folder name from /javascript to /assets
 > curl  "http://localhost:8888/admin/mv?from=/javascript&to=/assets"
-> curl  "http://localhost:8888/javascript/?pretty=y"     # no files under /javascript now
+
+# no files under /javascript now
+> curl  "http://localhost:8888/javascript/?pretty=y"
 {
   "Directory": "/javascript/",
   "Files": null,
   "Subdirectories": null
 }
-> curl  "http://localhost:8888/assets/?pretty=y"         # files are moved to /assets folder
+
+# files are moved to /assets folder
+> curl  "http://localhost:8888/assets/?pretty=y"
 {
   "Directory": "/assets/",
   "Files": [
