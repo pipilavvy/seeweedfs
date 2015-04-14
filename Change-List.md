@@ -2,6 +2,9 @@
 
 This file contains list of recent changes, important features, usage changes, data format changes, etc. Do read this if you upgrade.
 
+## v0.70 beta
+1. ...
+
 ## v0.69
 
 1. Add "weed volume -port.public=xxx" option for read only access.
