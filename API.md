@@ -338,8 +338,7 @@ curl  "http://localhost:8888/javascript/?pretty=y&lastFileName=new_name.js&limit
       "name": "report.js",
       "fid": "7,0254f1f3fd"
     }
-  ],
-  "Subdirectories": null
+  ]
 }
 
 ```
