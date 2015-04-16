@@ -64,11 +64,3 @@ weed master -port=9335 -mdir=./3
 ```
 
 To understand why, remember that the cluster information is "sticky", meaning it is stored on disk. If you restart the server, the cluster information stay the same, so the "-peers" option is not needed again.
-
-### Common Problem
-
-This "sticky" cluster information can cause some misunderstandings. For example, here is one:
-
-https://code.google.com/p/weed-fs/issues/detail?id=70
-
-The previously used value "localhost" would come up even not specified. This could cause your some time to figure out.
