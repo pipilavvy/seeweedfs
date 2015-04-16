@@ -41,3 +41,45 @@ CREATE TABLE seaweed_files (
    PRIMARY KEY (path)
 );
 ```
+
+## Starting the Filer
+
+To start the filer, after you have started the master and volume servers (with `weed server`, or `weed master` and `weed volume` respectively), you can start a filer server with `weed filer`, providing backing store location options to use the Redis or Cassandra backends:
+
+```bash
+# to use the default LevelDB backend:
+weed filer
+
+# to use the Redis backend:
+weed filer -redis.server=localhost:6379
+
+# to use the Cassandra backend:
+weed filer -cassandra.server=localhost
+```
+
+Alternatively, to start all servers in one shot, you can start a filer server alongside a master server and volume server with the `-filer` option to `weed server`:
+
+```
+# this is equivalent to `weed master`, `weed volume`, and `weed filer` together
+weed server -filer
+```
+
+## Using the Filer
+
+The filer provides a simple RESTful interface, where POST requests to a path upload the file content for that path, and GET requests retrieve the content for that path.
+
+```
+# POST a file and read it back
+curl -F "filename=@README.md" "http://localhost:8888/path/to/sources/"
+curl "http://localhost:8888/path/to/sources/README.md"
+
+# POST a file with a new name and read it back
+curl -F "filename=@Makefile" "http://localhost:8888/path/to/sources/new_name"
+curl "http://localhost:8888/path/to/sources/new_name"
+
+# list sub folders and files
+curl "http://localhost:8888/path/to/sources/?pretty=y"
+
+# if lots of files under this folder, here is a way to efficiently paginate through all of them
+curl "http://localhost:8888/path/to/sources/?lastFileName=abc.txt&limit=50&pretty=y"
+```
