@@ -4,7 +4,7 @@
 
 Download a proper version from [SeaweedFS download page][bintray].
 
-[bintray]: https://bintray.com/chrislusf/Weed-FS/seaweed
+[bintray]: https://bintray.com/chrislusf/seaweedfs/seaweedfs
 
 Decompress the downloaded file. You will only find one executable file, either "weed" on most systems or "weed.exe" on windows.
 
