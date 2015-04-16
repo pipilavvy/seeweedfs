@@ -2,7 +2,7 @@
 
 These are the official docs for SeaweedFS, superseding the Google Code wiki and the Read The Docs site.
 
-For pre-compiled releases, https://bintray.com/chrislusf/Weed-FS/seaweed
+For pre-compiled releases, https://bintray.com/chrislusf/seaweedfs/seaweedfs
 
 Contents:
 
