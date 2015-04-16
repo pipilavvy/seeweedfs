@@ -76,10 +76,16 @@ curl "http://localhost:8888/path/to/sources/README.md"
 # POST a file with a new name and read it back
 curl -F "filename=@Makefile" "http://localhost:8888/path/to/sources/new_name"
 curl "http://localhost:8888/path/to/sources/new_name"
+```
 
+You may also request a "listing" for a directory:
+
+```
 # list sub folders and files
 curl "http://localhost:8888/path/to/sources/?pretty=y"
 
 # if lots of files under this folder, here is a way to efficiently paginate through all of them
 curl "http://localhost:8888/path/to/sources/?lastFileName=abc.txt&limit=50&pretty=y"
 ```
+
+The Redis or Cassandra backends are currently implemented as ["flat namespace" stores](https://github.com/chrislusf/weed-fs/blob/master/go/filer/flat_namespace/flat_namespace_filer.go), so filers using them they may not perform directory listings at this time.
