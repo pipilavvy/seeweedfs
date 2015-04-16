@@ -20,7 +20,7 @@ The LevelDB backend is very capable and efficient; the main disadvantage it has,
 
 The LevelDB and Redis backends need no initialization.
 
-### Cassandra backend
+### Initializing the Cassandra backend
 
 Here is the CQL to create the table used by SeaweedFS's Cassandra store, as well as a keyspace for specifying the replication strategy to use.
 
