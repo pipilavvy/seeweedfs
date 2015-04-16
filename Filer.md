@@ -11,3 +11,29 @@ SeaweedFS's built-in filer supports three different backends (although pull requ
 The default backend, LevelDB, is for simple, non-distributed single nodes.
 
 The other backends, Redis and Cassandra, are for clustering backing stores that can be distributed across several nodes at high scale.
+
+## Initialization
+
+The LevelDB and Redis backends need no initialization.
+
+### Cassandra backend
+
+Here is the CQL to create the table used by SeaweedFS's Cassandra store, as well as a keyspace for specifying the replication strategy to use.
+
+While the table name and field structure must match what is written here, you are free to rename the keyspace and use whatever replication settings you wish. For production, you would want to set replication_factor to 3
+if there are at least 3 Cassandra servers.
+
+```cql
+create keyspace seaweed WITH replication = {
+  'class':'SimpleStrategy',
+  'replication_factor':1
+};
+
+use seaweed;
+
+CREATE TABLE seaweed_files (
+   path varchar,
+   fids list<varchar>,
+   PRIMARY KEY (path)
+);
+```
