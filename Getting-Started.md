@@ -69,13 +69,13 @@ This command would recursively upload all files. Or you can specify what files y
 
 Then, you can simply check "du -m -s /some/big/folder" to see the actual disk usage by OS, and compare it with the file size under "/data". Usually if you are uploading a lot of textual files, the consumed disk size would be much smaller since textual files are gzipped automatically.
 
-Now you can use your tools to hit weed-fs as hard as you can.
+Now you can use your tools to hit SeaweedFS as hard as you can.
 
 ## Using SeaweedFS in docker
 
 You can use image "cydev/weed" or build your own with [dockerfile][] in the root of repo.
 
-[dockerfile]: https://github.com/chrislusf/weed-fs/blob/master/Dockerfile
+[dockerfile]: https://github.com/chrislusf/seaweedfs/blob/master/Dockerfile
 
 ### Using pre-built Docker image
 
@@ -97,10 +97,10 @@ curl "http://$IP:9333/cluster/status?pretty=y"
 
 ### Building image from dockerfile
 
-Make a local copy of weed-fs from github
+Make a local copy of seaweedfs from github
 
 ```bash
-git clone https://github.com/chrislusf/weed-fs.git
+git clone https://github.com/chrislusf/seaweedfs.git
 ```
 
 Minimal Image (~19.6 MB)
@@ -128,5 +128,5 @@ docker run --name weed -d -p 9333:9333 -p 8080:8080 \
   -publicIp="$(curl -s cydev.ru/ip)"
 ```
 
-Now our weed-fs server will be persistent and accessible by localhost:9333 and :8080 on host machine.
+Now our SeaweedFS server will be persistent and accessible by localhost:9333 and :8080 on host machine.
 Dont forget to specify "-publicIp" for correct connectivity.
