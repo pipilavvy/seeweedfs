@@ -14,6 +14,7 @@ Contents:
 - [[Failover Master Server]]
 - [[Directories and Files]]
 - [[Distributed Filer]]
+- [[Backup]]
 - [[Use Cases]]
 - [[Optimization]]
 - [[Benchmarks]]
