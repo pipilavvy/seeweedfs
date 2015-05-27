@@ -3,7 +3,8 @@
 This file contains list of recent changes, important features, usage changes, data format changes, etc. Do read this if you upgrade.
 
 ## v0.70 beta
-1. ...
+1. Add "weed backup" command to backup a volume incrementally.
+2. 
 
 ## v0.69
 
