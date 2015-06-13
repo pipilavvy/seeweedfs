@@ -52,15 +52,3 @@ weed volume -dir=./3 -port=8082 -mserver=localhost:9335
 These 6 commands will actually functioning the same as the previous 3 commands from the cheatsheet.
 
 Even though we only specified one peer in "-peers" option to bootstrap, the master server will get to know all the other master servers in the cluster, and store these information in the local directory.
-
-## When you need to restart
-
-If you need to restart the master servers, just run the master servers WITHOUT the "-peers" option.
-
-```bash
-weed master -port=9333 -mdir=./1
-weed master -port=9334 -mdir=./2
-weed master -port=9335 -mdir=./3
-```
-
-To understand why, remember that the cluster information is "sticky", meaning it is stored on disk. If you restart the server, the cluster information stay the same, so the "-peers" option is not needed again.
