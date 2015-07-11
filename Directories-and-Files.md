@@ -104,18 +104,10 @@ Although one "weed filer" can only sits in one machine, you can start multiple "
 
 ### Future
 
-In future version, the parent_directory=>directory_id, and directory_id+filename=>file_id mappings will be refactored to support different storage system.
-
-The directory meta data may be switched to some other in-memory database.
-
-The LevelDB implementation may be switched underneath to external data storage, e.g. MySQL, TokyoCabinet, etc. Preferably some pure-go implementation.
-
-Also, a HA feature will be added, so that multiple "weed filer" instance can share the same set of view of files.
-
 Later, FUSE or HCFS plugins will be created, to really integrate SeaweedFS to existing systems.
 
 ### Helps Wanted
 
 This is a big step towards more interesting SeaweedFS usage and integration with existing systems.
 
-If you can help to refactor and implement other directory meta data, or file meta data storage, please do so.
+Help on FUSE is needed.
