@@ -90,6 +90,16 @@ For one file retrieval, the full_filename=>file_id lookup will be O(logN)
 using Redis or Cassandra. But very likely the one additional network hop would
 take longer than the actual lookup.
 
+## Deployment Notes
+
+Replication is controlled by the client side. The filer's default replication is "000". To enable it, start filer with similar option like this:
+
+```bash
+  -defaultReplicaPlacement=001
+```
+
+The same setting on master server would not take effect since filer will always use the specified or filer's default replication to write.
+
 ## Use Cases
 
 Clients can assess one "weed filer" via HTTP, create files via HTTP POST,
