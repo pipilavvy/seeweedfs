@@ -22,6 +22,10 @@ In addition, increase the replication will also help. Having the same data store
 
 More hard drives will give you better write/read throughput.
 
+## Increase user open file limit
+
+The SeaweedFS usually only open a few actual disk files. But the network file requests may exceed the default limit, usually default to 1024. For production, you will need root permission to increase the limit to something higher, e.g., "ulimit -n 10240".
+
 ## Gzip content
 
 SeaweedFS determines the file can be gzipped based on the file name extension. So if you submit a textual file, it's better to use an common file name extension, like ".txt", ".html", ".js", ".css", etc. If the name is unknown, like ".go", SeaweedFS will not gzip the content, but just save the content as is.
