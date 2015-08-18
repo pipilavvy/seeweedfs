@@ -5,7 +5,7 @@ Name | Author | Language
 [WeedPHP](https://github.com/micjohnson/weed-php/) | Mic Johnson | PHP
 [SeaweedFS Symfony bundle](https://github.com/micjohnson/weed-php-bundle) | Mic Johnson | PHP
 [SeaweedFS Node.js client](https://github.com/cruzrr/node-weedfs) | Aaron Blakely | Javascript
-[WeedNode](https://github.com/playlyfe/weedfs-nodejs) | Johny Jose | Javascript
+[WeedFS Node](https://github.com/playlyfe/weedfs-nodejs) | Johny Jose | Javascript
 [Amazon S3 API for SeaweedFS](https://github.com/tgulacsi/s3weed) | Tamás Gulácsi |  Go
 [File store upload test](https://github.com/tgulacsi/filestore-upload-test) | Tamás Gulácsi | Go
 [Java SeaweedFS client](https://github.com/simplebread/WeedFSClient) | Xu Zhang | Java
