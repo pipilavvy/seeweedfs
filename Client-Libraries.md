@@ -17,6 +17,7 @@ Name | Author | Language
 [Module for kohana](https://github.com/bububa/kohanaphp-weedfs) | Bububa | PHP
 [Weedo](https://github.com/ginuerzh/weedo) | Ginuerzh |  Go
 [Django-weed](https://github.com/ProstoKSI/django-weed) | ProstoKSI | Python
+[Seaweedrb](https://github.com/jguest/seaweedrb) | John Guest | Ruby
 
 ## Projects using SeaweedFS
 
