@@ -36,7 +36,7 @@ You can also manually gzip content before submission. If you do so, make sure th
 
 For volume servers, the memory consumption is tightly related to the number of files. For example, one 32G volume can easily have 1.5 million files if each file is only 20KB. To store the 1.5 million entries of meta data in memory, currently SeaweedFS consumes 36MB memory, about 24bytes per entry in memory. So if you allocate 64 volumes(2TB), you would need 2~3GB memory. However, if the average file size is larger, say 200KB, only 200~300MB memory is needed.
 
-SeaweedFS alsl has leveldb and boltdb support, which reduces memory consumption even more.
+SeaweedFS also has leveldb and boltdb support, which reduces memory consumption even more.
 
 To use it, "weed server -volume.index=[memory|leveldb|boltdb]", or "weed volume -index=[memory|leveldb|boltdb]". You can switch between the 3 modes any time, as often as possible. If the files for leveldb or boltdb is outdated or missing, they will be re-generated as needed.
 
