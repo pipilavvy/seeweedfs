@@ -46,3 +46,6 @@ The steps to append a large file:
 
 1. upload the new file chunks as usual, with mime type "application/octet-stream". Save the related info into ChunkInfo struct.
 1. update the updated manifest file with mime type "application/json", and add url parameter "cm=true".
+
+## Notes
+There are no particular limit in terms of chunk file size. Each chunk size does not need to be the same, even in the same file. The rule of thumb is to just being able to keep the whole chunk file in memory, and not to have too many small chunk files.
