@@ -34,8 +34,8 @@ When reading Chunk Manifest files, the SeaweedFS will find and send the data fil
 SeaweedFS delegates the effort to the client side. The steps are:
 
 1. split large files into chunks
-1. upload each file chunks as usual, with mime type "application/octet-stream". Save the related info into ChunkInfo struct.
-1. upload the manifest file with mime type "application/json", and add url parameter "cm=true".
+1. upload each file chunk as usual, with mime type "application/octet-stream". Save the related info into ChunkInfo struct. Each chunk can be spread onto different volumes, possibly giving faster parallel access.
+1. upload the manifest file with mime type "application/json", and add url parameter "cm=true". The FileId to store the manifest file is the entry point of the large file.
 
 
 ## Update large file
