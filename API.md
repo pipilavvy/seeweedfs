@@ -302,11 +302,11 @@ Examples:
 ```bash
 # Basic Usage:
 > curl -F file=@report.js "http://localhost:8888/javascript/"
-{"name":"report.js","size":866}
+{"name":"report.js","size":866, "fid":"7,0254f1f3fd","url":"http://localhost:8081/7,0254f1f3fd"}
 > curl  "http://localhost:8888/javascript/report.js"   # get the file content
 ...
 > curl -F file=@report.js "http://localhost:8888/javascript/new_name.js"    # upload the file with a different name
-{"name":"report.js","size":866}
+{"name":"report.js","size":866, "fid":"3,034389657e","url":"http://localhost:8081/3,034389657e"}
 > curl  "http://localhost:8888/javascript/?pretty=y"            # list all files under /javascript/
 {
   "Directory": "/javascript/",

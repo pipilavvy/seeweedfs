@@ -8,7 +8,7 @@ To support large files, SeaweedFS supports these two kinds of files:
 
 This piece of code shows the json file structure:
 
-https://github.com/chrislusf/seaweedfs/blob/master/go/operation/chunked_file.go#L24
+https://github.com/chrislusf/seaweedfs/blob/master/weed/operation/chunked_file.go#L24
 
 ```
 type ChunkInfo struct {

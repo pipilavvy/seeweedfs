@@ -88,4 +88,4 @@ curl "http://localhost:8888/path/to/sources/?pretty=y"
 curl "http://localhost:8888/path/to/sources/?lastFileName=abc.txt&limit=50&pretty=y"
 ```
 
-The Redis and Cassandra backends are currently implemented as ["flat namespace" stores](https://github.com/chrislusf/seaweedfs/blob/master/go/filer/flat_namespace/flat_namespace_filer.go), so filers using them may not perform directory listings at this time.
+The Redis and Cassandra backends are currently implemented as ["flat namespace" stores](https://github.com/chrislusf/seaweedfs/blob/master/weed/filer/flat_namespace/flat_namespace_filer.go), so filers using them may not perform directory listings at this time.
