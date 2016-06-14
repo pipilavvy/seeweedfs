@@ -203,6 +203,14 @@ This generates volume 3 on this volume server.
 
 If you use other replicationType, e.g. 001, you would need to do the same on other volume servers to create the mirroring volumes.
 
+### Delete а specific collection on a specific volume server
+
+This API should be protected just in case someone delete your volumes!
+
+```bash
+curl "http://localhost:8080/admin/delete_collection?collection=some_collection_name."
+```
+
 ### Check Volume Server Status
 
 ```bash
