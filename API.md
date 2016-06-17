@@ -57,6 +57,7 @@ This operation is not trivial. It will try to make a copy of the .dat and .idx f
 One volume servers one write a time. If you need to increase concurrency, you can pre-allocate lots of volumes. Here are examples. You can combine all the different options also.
 
 ```bash
+# specify a specific replication
 curl "http://localhost:9333/vol/grow?replication=000&count=4"
 {"count":4}
 # specify a collection
