@@ -8,8 +8,7 @@ Name | Author | Language
 [SeaweedFS Node](https://github.com/playlyfe/seaweedfs-node) | Johny Jose | Javascript
 [Amazon S3 API for SeaweedFS](https://github.com/tgulacsi/s3weed) | Tamás Gulácsi |  Go
 [File store upload test](https://github.com/tgulacsi/filestore-upload-test) | Tamás Gulácsi | Go
-[Java SeaweedFS client](https://github.com/simplebread/WeedFSClient) | Xu Zhang | Java
-[Java SeaweedFS client 2](https://github.com/zenria/Weed-FS-Java-Client) | Zenria | Java
+[Java SeaweedFS client](https://github.com/zenria/Weed-FS-Java-Client) | Zenria | Java
 [Python-weed](https://github.com/darkdarkfruit/python-weed) | Darkdarkfruit | Python
 [Pyweed](https://github.com/utek/pyweed) | Utek | Python
 [Camlistore blobserver Storage](https://github.com/tgulacsi/camli-weed) | Tamás Gulácsi | Go
